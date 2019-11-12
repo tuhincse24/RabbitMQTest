@@ -6,7 +6,9 @@ namespace RabbitMQProducer
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            Topicmessages topicmessages = new Topicmessages();
+            topicmessages.SendMessage();
+            Console.ReadLine();
         }
     }
 }
