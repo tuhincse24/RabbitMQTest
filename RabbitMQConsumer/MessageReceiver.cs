@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
 
 namespace RabbitMQConsumer
 {
@@ -20,6 +21,7 @@ namespace RabbitMQConsumer
             Console.WriteLine(string.Concat("Consumer tag: ", consumerTag));
             Console.WriteLine(string.Concat("Delivery tag: ", deliveryTag));
             Console.WriteLine(string.Concat("Routing tag: ", routingKey));
+            //Thread.Sleep(1000);
             Console.WriteLine(string.Concat("Message: ", Encoding.UTF8.GetString(body)));
             _channel.BasicAck(deliveryTag, false);
         }

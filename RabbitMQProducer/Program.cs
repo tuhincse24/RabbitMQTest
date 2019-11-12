@@ -7,7 +7,10 @@ namespace RabbitMQProducer
         static void Main(string[] args)
         {
             Topicmessages topicmessages = new Topicmessages();
-            topicmessages.SendMessage();
+            for(int i = 0; i < 20000; i++)
+            {
+                topicmessages.SendMessage();
+            }
             Console.ReadLine();
         }
     }

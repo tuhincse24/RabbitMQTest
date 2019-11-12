@@ -20,7 +20,7 @@ namespace RabbitMQConsumer
             var channel = connection.CreateModel();
             // accept only one unack-ed message at a time
             // uint prefetchSize, ushort prefetchCount, bool global
-            channel.BasicQos(0, 2, false);
+            channel.BasicQos(0, 10, false);
             MessageReceiver messageReceiver = new MessageReceiver(channel);
             channel.BasicConsume("topic.dhaka.queue", false, messageReceiver);
             Console.ReadLine();
