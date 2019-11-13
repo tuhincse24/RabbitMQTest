@@ -1,6 +1,5 @@
 ﻿using RabbitMQ.Client;
 using System;
-using System.Collections.Generic;
 using System.Text;
 
 namespace RabbitMQProducer
@@ -10,7 +9,7 @@ namespace RabbitMQProducer
         private const string UName = "guest";
         private const string PWD = "guest";
         private const string HName = "localhost";
-        public void SendMessage()
+        public void SendMessage(int msgCount)
 
         {
             //Main entry point to the RabbitMQ .NET AMQP client
@@ -25,8 +24,9 @@ namespace RabbitMQProducer
             var model = connection.CreateModel();
             var properties = model.CreateBasicProperties();
             properties.Persistent = false;
-            byte[] messagebuffer = Encoding.Default.GetBytes("Message from Topic Exchange 'dhaka' ");
-            model.BasicPublish("topic.exchange", "Message.dhaka.Email", properties, messagebuffer);
+            var body = $"Message from Topic Exchange 'dhaka' {msgCount}";
+            byte[] messagebuffer = Encoding.Default.GetBytes(body);
+            model.BasicPublish("topic.exchange", ".dhaka.", properties, messagebuffer);
             Console.WriteLine("Message Sent From: topic.exchange ");
 
             Console.WriteLine("Routing Key: Message.dhaka.Email");

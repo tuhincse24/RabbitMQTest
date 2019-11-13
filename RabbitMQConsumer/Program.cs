@@ -24,7 +24,8 @@ namespace RabbitMQConsumer
             var channel = connection.CreateModel();
             var consumer = new EventingBasicConsumer(channel);
 
-            channel.BasicQos(prefetchSize: 0, prefetchCount: 10, global: false);
+            channel.BasicQos(prefetchSize: 0, prefetchCount: 100, global: false);
+            channel.BasicConsume("topic.dhaka.queue", false, consumer);
             consumer.Received += async (ch, ea) =>
             {
                 var body = ea.Body;
@@ -32,11 +33,11 @@ namespace RabbitMQConsumer
                 await Task.Run(() => Console.WriteLine(string.Concat("Delivery Tag: ", ea.DeliveryTag)));
                 Thread.Sleep(1000);
                 Console.WriteLine(string.Concat("Delivery Tag: ", ea.DeliveryTag));
+                String consumerTag = channel.BasicConsume("topic.dhaka.queue", false, consumer);
+                Console.WriteLine(string.Concat("Consumer Tag: ", consumerTag));
                 // ... process the message
                 channel.BasicAck(ea.DeliveryTag, false);
             };
-            String consumerTag = channel.BasicConsume("topic.dhaka.queue", false, consumer);
-            Console.WriteLine(string.Concat("Consumer Tag: ", consumerTag));
 
             //// accept only one unack-ed message at a time
             //// uint prefetchSize, ushort prefetchCount, bool global
