@@ -2,6 +2,8 @@
 using RabbitMQ.Client.Events;
 using System;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace RabbitMQConsumer
 {
@@ -23,11 +25,12 @@ namespace RabbitMQConsumer
             var consumer = new EventingBasicConsumer(channel);
 
             channel.BasicQos(prefetchSize: 0, prefetchCount: 10, global: false);
-            consumer.Received += (ch, ea) =>
+            consumer.Received += async (ch, ea) =>
             {
                 var body = ea.Body;
                 Console.WriteLine(string.Concat("Message: ", Encoding.UTF8.GetString(body)));
-
+                await Task.Run(() => Console.WriteLine(string.Concat("Delivery Tag: ", ea.DeliveryTag)));
+                Thread.Sleep(1000);
                 Console.WriteLine(string.Concat("Delivery Tag: ", ea.DeliveryTag));
                 // ... process the message
                 channel.BasicAck(ea.DeliveryTag, false);
